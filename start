@@ -1,0 +1,17 @@
+echo "BUILDING......................"
+nasm boot.asm -f bin -o boot.bin
+
+if [ ! -f boot.bin ]; then
+    echo "FUCK THIS SHIT I AM OUT.............."
+    exit 1
+fi
+
+echo "BUILD 1"
+echo "QEMUU................"
+
+exec env -i \
+  PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+  HOME="$HOME" \
+  USER="$USER" \
+  XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}" \
+  /usr/bin/qemu-system-x86_64 -display sdl -drive format=raw,file=boot.bin
