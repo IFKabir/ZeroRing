@@ -1,0 +1,16 @@
+*.bin
+*.o
+*.elf
+*.img
+*.iso
+*.vdi
+build/
+out/
+CMakeCache.txt
+CMakeFiles/
+*.exe
+*.dll
+*.so
+*.a
+.vscode/
+compile_commands.json
