@@ -1,13 +1,35 @@
-echo "BUILDING......................"
-nasm boot.asm -f bin -o boot.bin
+#!/bin/bash
+set -e
 
-if [ ! -f boot.bin ]; then
-    echo "FUCK THIS SHIT I AM OUT.............."
+# ── Colors ──────────────────────────────────────────────
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+# ── Build ────────────────────────────────────────────────
+echo -e "${CYAN}${BOLD}┌─────────────────────────────────┐${RESET}"
+echo -e "${CYAN}${BOLD}│        ZeroRing Bootloader      │${RESET}"
+echo -e "${CYAN}${BOLD}└─────────────────────────────────┘${RESET}"
+echo ""
+echo -e "${YELLOW}[BUILD]${RESET} Assembling boot.asm..."
+
+if ! nasm boot.asm -f bin -o boot.bin; then
+    echo -e "${RED}[ERROR]${RESET} NASM failed. Fix your damn code."
     exit 1
 fi
 
-echo "BUILD 1"
-echo "QEMUU................"
+if [ ! -f boot.bin ]; then
+    echo -e "${RED}[ERROR]${RESET} boot.bin not found. Something went really wrong."
+    exit 1
+fi
+
+echo -e "${GREEN}[OK]${RESET}    Build successful → boot.bin"
+echo ""
+echo -e "${YELLOW}[QEMU]${RESET}  Launching emulator..."
+echo ""
 
 exec env -i \
   PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \

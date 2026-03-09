@@ -1,20 +1,21 @@
-mov ah, 0x0e
-mov al, 'A'
+org 0x7c00
+bits 16
 
-caps:
-    int 0x10
-    jmp small
+start:
+    mov si, message
+    mov ah, 0x0e        ; BIOS teletype output
 
-small:
-    add al, 33
-    int 0x10
-    cmp al, 122
-    je end
-    sub al, 31
-    jmp caps
+.print_loop:
+    lodsb               ; load byte from [si] into al, increment si
+    test al, al         ; check for null terminator
+    jz .done
+    int 0x10            ; print character
+    jmp .print_loop
 
-end:
-    jmp $
+.done:
+    jmp $               ; halt
+
+message db "SUDIPTO MADARCHOD THA MADARCHOD HAI MADARCHOD RAHEGA", 0
 
 times 510-($-$$) db 0
 db 0x55, 0xaa
