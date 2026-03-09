@@ -1,21 +1,34 @@
-org 0x7c00
-bits 16
+[org 0x7c00]
 
-start:
-    mov si, message
-    mov ah, 0x0e        ; BIOS teletype output
+mov bp, 0x8000
+mov sp, bp
 
-.print_loop:
-    lodsb               ; load byte from [si] into al, increment si
-    test al, al         ; check for null terminator
-    jz .done
-    int 0x10            ; print character
-    jmp .print_loop
+mov ax, 'A'
+push ax
 
-.done:
-    jmp $               ; halt
+mov ax, 'B'
+push ax
 
-message db "SUDIPTO MADARCHOD THA MADARCHOD HAI MADARCHOD RAHEGA", 0
+mov ax, 'C'
+
+call print
+
+pop ax
+call print
+
+pop ax
+call print
+
+pop ax
+call print
+
+jmp $
+
+print:
+    mov ah, 0x0e
+    int 0x10
+    ret
+
 
 times 510-($-$$) db 0
-db 0x55, 0xaa
+dw 0xaa55
